@@ -228,9 +228,15 @@ kubectl --context docker-desktop get deploy sample-app -n sample-app-dev --watch
 ### 6-1. Argo Rollouts 컨트롤러 설치
 ```bash
 kubectl --context docker-desktop create namespace argo-rollouts
-kubectl --context docker-desktop apply -n argo-rollouts -f \
+kubectl --context docker-desktop apply --server-side -n argo-rollouts -f \
   https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
 ```
+> `--server-side`가 필요한 이유: Argo Rollouts의 CRD 정의가 커서 일반 `kubectl apply`로
+> 설치하면 Kubernetes의 annotation 크기 제한(256KB)에 걸려 다음과 같은 에러가 날 수
+> 있습니다 — `metadata.annotations: Too long: may not be more than 262144 bytes`.
+> `--server-side`는 이 제한이 적용되는 annotation을 쓰지 않는 방식이라 이 문제를 피합니다.
+> 만약 이미 일반 `apply`로 한 번 시도해서 일부 리소스가 생성된 상태라면
+> `--server-side --force-conflicts` 로 실행하세요.
 
 ### 6-2. (선택) 시각화 플러그인 설치
 `kubectl argo rollouts` 명령을 쓰려면 플러그인이 필요합니다. 설치 방법은

@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/magicalartist-maker/cicd
+    repoURL: <YOUR_REPO_URL>
     targetRevision: main
     path: argocd/manifests
   destination:
